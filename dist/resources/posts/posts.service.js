@@ -54,12 +54,104 @@ var PostService = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         _b.trys.push([0, 2, , 3]);
-                        console.log("service");
                         return [4 /*yield*/, this.posts.create(body)];
                     case 1: return [2 /*return*/, _b.sent()];
                     case 2:
                         _a = _b.sent();
                         throw new Error("Cannot Create Post");
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+     * Get All Posts
+     */
+    PostService.prototype.getAllPosts = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var posts, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.posts.find()];
+                    case 1:
+                        posts = _b.sent();
+                        return [2 /*return*/, posts];
+                    case 2:
+                        _a = _b.sent();
+                        throw new Error("Cannot Create Post");
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+     * Get Post By Id
+     */
+    PostService.prototype.getPostById = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var post, err_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.posts.findById(id)];
+                    case 1:
+                        post = _a.sent();
+                        return [2 /*return*/, post];
+                    case 2:
+                        err_1 = _a.sent();
+                        console.error(err_1);
+                        return [2 /*return*/, null]; // Return null if an error occurs or if the post is not found
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+     * Update Posts
+     */
+    PostService.prototype.updatePosts = function (id, dataBody) {
+        return __awaiter(this, void 0, void 0, function () {
+            var updatedPost, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.posts.findByIdAndUpdate(id, dataBody, {
+                                new: true,
+                            })];
+                    case 1:
+                        updatedPost = _a.sent();
+                        return [2 /*return*/, updatedPost ? updatedPost.toObject() : null];
+                    case 2:
+                        error_1 = _a.sent();
+                        console.error("Error in updatePosts:", error_1);
+                        return [2 /*return*/, null];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+     * Delete Posts
+     */
+    PostService.prototype.deletePosts = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.posts.findByIdAndDelete(id)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, "Post ".concat(id, " Deleted Successfuly")];
+                    case 2:
+                        error_2 = _a.sent();
+                        console.error("Error in updatePosts:", error_2);
+                        return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
                 }
             });

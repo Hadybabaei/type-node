@@ -46,37 +46,137 @@ var validation_middleware_1 = __importDefault(require("../../middleware/validati
 var post_dto_1 = __importDefault(require("./post.dto"));
 var PostControler = /** @class */ (function () {
     function PostControler() {
+        var _this = this;
         this.path = "/posts";
         this.router = (0, express_1.Router)();
-        this.postService = new posts_service_1.default();
-        this.initializeRouter();
-        console.log("New Controller Created");
-    }
-    PostControler.prototype.initializeRouter = function () {
-        this.router.post("".concat(this.path), (0, validation_middleware_1.default)(post_dto_1.default.create), this.createPost);
-    };
-    PostControler.prototype.createPost = function (req, res, next) {
-        return __awaiter(this, void 0, void 0, function () {
-            var body, post, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+        this._postService = new posts_service_1.default();
+        this.createPost = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var body, post, err_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _b.trys.push([0, 2, , 3]);
-                        console.log("controller");
+                        _a.trys.push([0, 2, , 3]);
                         body = req.body;
-                        return [4 /*yield*/, this.postService.createPost(body)];
+                        return [4 /*yield*/, this._postService.createPost(body)];
                     case 1:
-                        post = _b.sent();
+                        post = _a.sent();
                         res.status(201).json({ Success: true, post: post });
                         return [3 /*break*/, 3];
                     case 2:
-                        _a = _b.sent();
+                        err_1 = _a.sent();
+                        console.log(err_1);
                         next(new http_exceptions_1.default(400, "Cannot Create Post"));
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
             });
-        });
+        }); };
+        this.getAllPosts = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var posts, err_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this._postService.getAllPosts()];
+                    case 1:
+                        posts = _a.sent();
+                        if (posts.length > 0)
+                            res.status(200).json({ Success: true, posts: posts });
+                        else
+                            res.status(200).json({ Success: true, posts: "No Post Created Yet" });
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_2 = _a.sent();
+                        console.log(err_2);
+                        next(new http_exceptions_1.default(500, "Internal Server Error"));
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.getPostById = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var post, err_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this._postService.getPostById(req.params.id)];
+                    case 1:
+                        post = _a.sent();
+                        if (post)
+                            res.status(200).json({ Success: true, post: post });
+                        else
+                            res.status(404).json({ Success: false, Message: "Post Not Found!" });
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_3 = _a.sent();
+                        console.log(err_3);
+                        next(new http_exceptions_1.default(500, "Internal Server Error"));
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.updatePost = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var postId, updateData, updatedPost, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        postId = req.params.id;
+                        updateData = req.body;
+                        return [4 /*yield*/, this._postService.updatePosts(postId, updateData)];
+                    case 1:
+                        updatedPost = _a.sent();
+                        if (updatedPost) {
+                            res.status(200).json(updatedPost);
+                        }
+                        else {
+                            res.status(404).json({ message: "Post Not Found!" });
+                        }
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_1 = _a.sent();
+                        console.error("Error in updatePost:", error_1);
+                        next(new http_exceptions_1.default(500, "Internal Server Error"));
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.deletePost = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var result, error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this._postService.deletePosts(req.params.id)];
+                    case 1:
+                        result = _a.sent();
+                        if (result) {
+                            res.status(200).json({ Message: result, Success: true });
+                        }
+                        else {
+                            res.status(404).json({ Message: "Post Not Found", Success: false });
+                        }
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_2 = _a.sent();
+                        console.error("Error in updatePost:", error_2);
+                        next(new http_exceptions_1.default(500, "Internal Server Error"));
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.initializeRouter();
+    }
+    PostControler.prototype.initializeRouter = function () {
+        this.router.post("".concat(this.path), (0, validation_middleware_1.default)(post_dto_1.default.create), this.createPost);
+        this.router.get("".concat(this.path), this.getAllPosts);
+        this.router.get("".concat(this.path, "/:id"), this.getPostById);
+        this.router.put("".concat(this.path, "/:id"), (0, validation_middleware_1.default)(post_dto_1.default.update), this.updatePost);
+        this.router.delete("".concat(this.path, "/:id"), this.deletePost);
     };
     return PostControler;
 }());

@@ -8,4 +8,8 @@ var create = joi_1.default.object({
     title: joi_1.default.string().required(),
     body: joi_1.default.string().required(),
 });
-exports.default = { create: create };
+var update = joi_1.default.object({
+    title: joi_1.default.string(),
+    body: joi_1.default.string(),
+});
+exports.default = { create: create, update: update };
